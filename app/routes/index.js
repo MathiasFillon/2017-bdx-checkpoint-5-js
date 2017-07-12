@@ -4,7 +4,7 @@
 'use strict'
 let fs = require('fs')
 let express = require('express')
-let jwt             = require('express-jwt')
+let jwt = require('express-jwt')
 
 const ENV = require('../../config/env')[process.env.NODE_ENV || 'development']
 
@@ -13,14 +13,16 @@ module.exports = (passport) => {
 
     // Initialize express JWT
     // It should receive the secretToken (the same one used to generate JWT token in User model)
-    let authCheck = jwt({secret: ENV.secretToken, getToken: (req) => {
-        // Get Token is a function to tell JWT where our token is stored in users' requests
-        // In our app, this token is stored in cookies["blog-token"]
-        console.log(req.query)
-        console.log(req.cookies["blog-token"])
-        return req.cookies["blog-token"]
-    }})
-    
+    let authCheck = jwt({
+        secret: ENV.secretToken, getToken: (req) => {
+            // Get Token is a function to tell JWT where our token is stored in users' requests
+            // In our app, this token is stored in cookies["blog-token"]
+            console.log(req.query)
+            console.log(req.cookies["blog-token"])
+            return req.cookies["blog-token"]
+        }
+    })
+
     // List all files in /app/routes folder
     fs.readdir('./app/routes', (error, files) => {
         if (error)
@@ -33,10 +35,10 @@ module.exports = (passport) => {
                 if (route !== 'index') {
                     // require the route with ROUTER like param
                     // Pass authCheck to app' routes, expect for 'auth' routes as these should always be accessible (blocking routes to authenticate by checking authentication should seem weird to everyone :) )
-                    if (route === 'auth'){
-                        require('./' + route)(ROUTER, passport)    
+                    if (route === 'auth') {
+                        require('./' + route)(ROUTER, passport)
                     } else {
-                        require('./' + route)(ROUTER, authCheck)    
+                        require('./' + route)(ROUTER, authCheck)
                     }
                 }
             })

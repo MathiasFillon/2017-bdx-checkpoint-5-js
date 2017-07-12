@@ -1,7 +1,7 @@
 'use strict'
 let mongoose = require('mongoose')
-let crypto   = require('crypto')
-let jwt      = require('jsonwebtoken')
+let crypto = require('crypto')
+let jwt = require('jsonwebtoken')
 const ENV = require('../../config/env')[process.env.NODE_ENV || 'development']
 
 // What is jwt? 
@@ -12,22 +12,22 @@ const ENV = require('../../config/env')[process.env.NODE_ENV || 'development']
 
 let userSchema = new mongoose.Schema({
   email: {
-    type: String, 
-    require: true, 
+    type: String,
+    require: true,
     unique: true
   },
   name: {
-    type: String, 
+    type: String,
     require: true
   },
   encryptedPassword: {
-    type: String, 
+    type: String,
     default: ''
   },
   salt: String,
   facebook: {
-    id: String, 
-    token: String, 
+    id: String,
+    token: String,
     photo: String
   },
   bookmarks: [{
@@ -35,18 +35,18 @@ let userSchema = new mongoose.Schema({
     ref: 'post'
   }],
   isAdmin: {
-    type: Boolean, 
+    type: Boolean,
     default: false
   }
 }, {
-  timestamps: true
-})
+    timestamps: true
+  })
 
 // Adding our own methods to userSchema
 // That will allow us to use them through the User model
 
 // Encrypt password function
-userSchema.methods.setPassword = function(password){
+userSchema.methods.setPassword = function (password) {
   // Generate random string to set salt
   this.salt = crypto.randomBytes(32).toString('hex')
   // take a look at: https://nodejs.org/api/crypto.html
@@ -55,13 +55,13 @@ userSchema.methods.setPassword = function(password){
 }
 
 // Validate password function for authentication
-userSchema.methods.validPassword = function(password){
+userSchema.methods.validPassword = function (password) {
   let testedPasswordHash = crypto.pbkdf2Sync(password, this.salt, 100000, 256, 'sha512').toString('hex')
   // Should be true if provided password is the same as encrypted stored password
   return this.encryptedPassword === testedPasswordHash
 }
 
-userSchema.methods.generateJWT = function() {
+userSchema.methods.generateJWT = function () {
   // Create jwt token and return it
   // First argument of 'sign' will be the shared information by both client and server
   // This is what is called a "Payload", be careful of what you put in there, you never know... :)
@@ -75,8 +75,8 @@ userSchema.methods.generateJWT = function() {
     isAdmin: this.isAdmin,
     bookmarks: this.bookmarks
   }, ENV.secretToken, {
-    expiresIn: '7d'
-  })
+      expiresIn: '7d'
+    })
 }
 
 module.exports = mongoose.model('User', userSchema)
