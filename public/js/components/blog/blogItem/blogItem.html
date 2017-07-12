@@ -1,8 +1,9 @@
 <!-- Display blogItemMenu component (see blogItemMenu.js ) and bind properties with all functions  -->
-<blog-item-menu ng-if="$ctrl.editable" user="$ctrl.user" edit-mode="$ctrl.editMode" on-undo="$ctrl.undo()" on-edit="$ctrl.editMode = !$ctrl.editMode" on-delete="$ctrl.delete()" on-save="$ctrl.save()" />
+<blog-item-menu ng-if="$ctrl.editable" user="$ctrl.user" edit-mode="$ctrl.editMode" on-undo="$ctrl.undo()" on-edit="$ctrl.editMode = !$ctrl.editMode"
+    on-delete="$ctrl.delete()" on-save="$ctrl.save()" />
 <div class="col s12 m4">
     <div class="card">
-    
+
         <!-- In general if it's not editable it's when this component is used in the blogList component -->
         <div class="card-content">
             <!-- Display post.title if this component is not editable or editable and not in edit mode -->
@@ -17,6 +18,18 @@
             </div>
             <!-- Display textarea for editing post.content only if editable and in edit mode -->
             <textarea class="materialize-textarea" ng-if="($ctrl.editable && $ctrl.editMode)" ng-model="$ctrl.post.content" placeholder="Content"></textarea>
+
+            <!--<label for="inputCreated">date</label>
+            <input input-date type="text" ng-if="($ctrl.editable || ($ctrl.editable && !$ctrl.editMode))" ng-model="$ctrl.post.date"
+                name="created" id="inputCreated" ng-model="currentTime" container="" format="dd/mm/yyyy" months-full="{{ $ctrl.month }}"
+                months-short="{{ $ctrl.monthShort }}" weekdays-full="{{ $ctrl.weekdaysFull }}" weekdays-short="{{ $ctrl.weekdaysShort }}"
+                weekdays-letter="{{ $ctrl.weekdaysLetter }}" disable="disable" min="{{ $ctrl.minDate }}" max="{{ $ctrl.maxDate }}"
+                today="today" first-day="1" clear="clear" close="close" select-years="15" on-start="onStart()" on-render="onRender()"
+                on-open="onOpen()" on-close="onClose()" on-set="onSet()" on-stop="onStop()" />-->
+            <div ng-if="(!$ctrl.editable || ($ctrl.editable && !$ctrl.editMode))">
+                {{$ctrl.post.date | limitTo: ($ctrl.editable ? $ctrl.post.date.length : 110 )}}
+            </div>
+
         </div>
 
         <div class="card-action">
