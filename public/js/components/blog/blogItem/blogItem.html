@@ -19,6 +19,15 @@
             <!-- Display textarea for editing post.content only if editable and in edit mode -->
             <textarea class="materialize-textarea" ng-if="($ctrl.editable && $ctrl.editMode)" ng-model="$ctrl.post.content" placeholder="Content"></textarea>
 
+            <div class="switch" ng-if="($ctrl.editable && $ctrl.editMode)">
+                <label>
+                     Off
+                 <input type="checkbox">
+                 <span class="lever" ></span>
+                    On
+                </label>
+            </div>
+
             <!--<label for="inputCreated">date</label>
             <input input-date type="text" ng-if="($ctrl.editable || ($ctrl.editable && !$ctrl.editMode))" ng-model="$ctrl.post.date"
                 name="created" id="inputCreated" ng-model="currentTime" container="" format="dd/mm/yyyy" months-full="{{ $ctrl.month }}"
